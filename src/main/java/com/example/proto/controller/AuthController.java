@@ -19,9 +19,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ApiDataResponse<TokenDto> login(@Valid LoginRequest loginRequest) {
+        // TODO 로그인 서비스 분리, 토큰 처리 세분화
         Employee employeeInfo = employeeService.getEmployeeForLogin(loginRequest);
         String token = JwtManager.createToken(employeeInfo.getId(), employeeInfo.getEmail());
-
-        return new ApiDataResponse<>(new TokenDto(token));
+        return new ApiDataResponse<>(new TokenDto(token, token));
     }
 }
