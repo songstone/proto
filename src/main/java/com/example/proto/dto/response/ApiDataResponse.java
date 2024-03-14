@@ -1,9 +1,9 @@
-package com.example.proto.dto;
+package com.example.proto.dto.response;
 
 import lombok.Getter;
 
 @Getter
-public class ApiDataResponse<T> extends ApiResponse{
+public class ApiDataResponse<T> extends ApiResponse {
 
     private final T data;
 

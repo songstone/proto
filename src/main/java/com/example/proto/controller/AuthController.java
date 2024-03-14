@@ -1,11 +1,9 @@
 package com.example.proto.controller;
 
-import com.example.proto.auth.JwtManager;
-import com.example.proto.domain.Employee;
-import com.example.proto.dto.ApiDataResponse;
-import com.example.proto.dto.LoginRequest;
+import com.example.proto.auth.AuthService;
+import com.example.proto.dto.response.ApiDataResponse;
+import com.example.proto.dto.request.LoginRequest;
 import com.example.proto.dto.TokenDto;
-import com.example.proto.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final EmployeeService employeeService;
+    private final AuthService authService;
 
     @PostMapping("/login")
     public ApiDataResponse<TokenDto> login(@Valid LoginRequest loginRequest) {
-        // TODO 로그인 서비스 분리, 토큰 처리 세분화
-        Employee employeeInfo = employeeService.getEmployeeForLogin(loginRequest);
-        String token = JwtManager.createToken(employeeInfo.getId(), employeeInfo.getEmail());
-        return new ApiDataResponse<>(new TokenDto(token, token));
+        TokenDto token = authService.login(loginRequest);
+
+        return new ApiDataResponse<>(token);
     }
 }

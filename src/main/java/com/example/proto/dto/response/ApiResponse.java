@@ -1,4 +1,4 @@
-package com.example.proto.dto;
+package com.example.proto.dto.response;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

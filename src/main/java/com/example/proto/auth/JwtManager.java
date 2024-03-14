@@ -1,25 +1,53 @@
 package com.example.proto.auth;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
+import jakarta.servlet.http.HttpServletRequest;
 
-import java.time.LocalDateTime;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
 import java.util.Date;
 
+@Component
 public class JwtManager {
 
-    //TODO properties 분리
     private static final String SECRET_KEY = "HUB_PROTO";
-    private static final Long EXP = 1000L*60*60*24*7;
+    private static final Long EXP = 3 * (1000L*60*60);
 
-    public static String createToken(Long empNo, String email) {
+    public String createToken(Long empNo) {
         return Jwts.builder()
-                .setSubject(empNo + "_" + email)
+                .setSubject(String.valueOf(empNo))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()+EXP))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+    }
+
+    public boolean verifyToken(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token);
+
+            return claims.getBody()
+                    .getExpiration()
+                    .after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getSubject(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String extractToken(HttpServletRequest request) {
+        String authToken = request.getHeader("Authorization");
+        if(!StringUtils.hasText(authToken)) return "";
+
+        return authToken.replace("Bearer ", "");
     }
 }

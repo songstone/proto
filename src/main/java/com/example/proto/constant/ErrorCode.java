@@ -8,24 +8,17 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    BAD_REQUEST(4000, "BAD_REQUEST"),
-    ENTITY_NOT_FOUND(4001, "ENTITY_NOT_FOUND"),
+    BAD_REQUEST(40000, HttpStatus.BAD_REQUEST, "BAD_REQUEST"),
+    ENTITY_NOT_FOUND(40001, HttpStatus.BAD_REQUEST, "ENTITY_NOT_FOUND"),
 
-    INTERNAL_SERVER_ERROR(5000, "INTERVAL_SERVER_ERROR"),
+    INVALID_TOKEN(40100, HttpStatus.UNAUTHORIZED, "INVALID_TOKEN"),
+
+    INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR,"INTERVAL_SERVER_ERROR"),
 
     ;
 
     private final Integer code;
+    private final HttpStatus httpStatus;
     private final String message;
-
-    public HttpStatus httpStatus() {
-        return isClientError()
-            ? HttpStatus.BAD_REQUEST
-            : HttpStatus.INTERNAL_SERVER_ERROR;
-    }
-
-    private boolean isClientError() {
-        return this.code/1000 == 4;
-    }
 
 }
