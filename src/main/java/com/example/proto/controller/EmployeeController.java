@@ -1,6 +1,7 @@
 package com.example.proto.controller;
 
 import com.example.proto.domain.Employee;
+import com.example.proto.dto.ApiDataResponse;
 import com.example.proto.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +19,16 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("/")
-    public List<Employee> getEmployees() {
-        return employeeService.getEmployees();
+    public ApiDataResponse<List<Employee>> getEmployees() {
+        List<Employee> employees = employeeService.getEmployees();
+
+        return new ApiDataResponse<>(employees);
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployee(@PathVariable(name = "id") Long id) throws Exception {
-        return employeeService.getEmployee(id);
+    public ApiDataResponse<Employee> getEmployee(@PathVariable(name = "id") Long id) {
+        Employee employee = employeeService.getEmployee(id);
+
+        return new ApiDataResponse<>(employee);
     }
 }
