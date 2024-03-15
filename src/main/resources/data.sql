@@ -9,3 +9,16 @@ VALUES ('test1@naver.com', '1234', 'song1', '010-1231-2232', 'Y', CURRENT_TIMEST
        ('test8@naver.com', '6868', 'song8', '010-1231-2237', 'N', CURRENT_TIMESTAMP),
        ('test9@naver.com', '7979', 'song9', '010-1231-2238', 'N', CURRENT_TIMESTAMP),
        ('test10@naver.com', '8080', 'song10', '010-1231-2239', 'N', CURRENT_TIMESTAMP);
+
+INSERT INTO department(`name`, is_deleted, created_at)
+VALUES  ('개발A', 'N', CURRENT_TIMESTAMP),
+        ('개발B', 'N', CURRENT_TIMESTAMP),
+        ('개발C', 'N', CURRENT_TIMESTAMP),
+        ('개발D', 'N', CURRENT_TIMESTAMP);
+
+INSERT INTO department(`name`, parent_no, is_deleted, created_at)
+VALUES  ('개발A-1', 1, 'N', CURRENT_TIMESTAMP),
+        ('개발A-2', 1, 'N', CURRENT_TIMESTAMP),
+        ('개발A-3', 1, 'N', CURRENT_TIMESTAMP),
+        ('개발B-1', 2, 'N', CURRENT_TIMESTAMP),
+        ('개발B-2', 2, 'N', CURRENT_TIMESTAMP);

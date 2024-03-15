@@ -1,13 +1,12 @@
 package com.example.proto.controller;
 
+import com.example.proto.dto.RegisterDepartmentRequest;
 import com.example.proto.dto.response.ApiDataResponse;
 import com.example.proto.dto.EmployeeDto;
 import com.example.proto.service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @GetMapping("/")
+    @GetMapping
     public ApiDataResponse<List<EmployeeDto>> getEmployees() {
         List<EmployeeDto> employees = employeeService.getEmployees();
 
@@ -30,5 +29,12 @@ public class EmployeeController {
         EmployeeDto employee = employeeService.getEmployee(id);
 
         return new ApiDataResponse<>(employee);
+    }
+
+    @PostMapping("/department")
+    public ApiDataResponse<Integer> registerDepartment(@Valid RegisterDepartmentRequest registerDepartmentRequest) {
+        employeeService.registerDepartment(registerDepartmentRequest);
+
+        return new ApiDataResponse<>(1);
     }
 }

@@ -16,26 +16,37 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "employee")
-public class Employee {
+@Table(name = "department")
+public class Department {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-
-    private String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_no")
+    private Department parentDepartment;
 
     private String name;
 
-    private String phone;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "leader_no")
+    private Employee leader;
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department",fetch = FetchType.LAZY)
     private List<EmployeeDepartment> employeeDepartments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
-    private List<Department> manageDepartments = new ArrayList<>();
+    @OneToMany(mappedBy = "parentDepartment", fetch = FetchType.LAZY)
+    private List<Department> childDepartments = new ArrayList<>();
 
+    public void designateLeader(Employee employee) {
+        this.leader = employee;
+        employee.getManageDepartments().add(this);
+    }
+
+    public void registerParent(Department department) {
+        this.parentDepartment = department;
+        department.childDepartments.add(this);
+    }
 
     // TODO 분리
     @Column(length = 1)

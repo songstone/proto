@@ -3,7 +3,6 @@ package com.example.proto.dto;
 import com.example.proto.domain.Employee;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-
 import java.time.LocalDateTime;
 
 public record EmployeeDto(
