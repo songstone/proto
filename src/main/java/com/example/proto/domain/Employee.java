@@ -29,6 +29,13 @@ public class Employee {
 
     private String phone;
 
+    @Column(length = 1)
+    private String isDeleted;
+
     @CreatedDate
     private LocalDateTime createdAt;
+
+    public boolean isValid() {
+        return "Y".equals(this.isDeleted);
+    }
 }

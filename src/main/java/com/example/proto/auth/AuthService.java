@@ -18,8 +18,8 @@ public class AuthService {
     private final EmployeeRepository employeeRepository;
 
     public TokenDto login(LoginRequest loginRequest) {
-        Employee employee = employeeRepository.findByEmailAndPassword(loginRequest.email(), loginRequest.password()).orElseThrow(
-                () -> new HubException(ENTITY_NOT_FOUND, "일치하는 계정정보가 존재하지 않습니다.")
+        Employee employee = employeeRepository.findUserForLogin(loginRequest.email(), loginRequest.password())
+            .orElseThrow(() -> new HubException(ENTITY_NOT_FOUND, "일치하는 계정정보가 존재하지 않습니다.")
         );
 
         return new TokenDto(jwtManager.createToken(employee.getId()));
