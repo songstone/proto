@@ -18,14 +18,21 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ApiResponse> valid(MethodArgumentNotValidException e) {
+        ObjectError detailError = extractValidationDetailError(e);
+        String detailMessage = detailError.getDefaultMessage();
+
+        log.error("[{}] {}", detailError.getObjectName(), detailMessage);
+
         ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         HttpStatus status = errorCode.getHttpStatus();
 
-        return ResponseEntity.status(status).body(new ApiResponse(errorCode.getCode(), extractValidationDetailMessage(e)));
+        return ResponseEntity.status(status).body(new ApiResponse(errorCode.getCode(), detailMessage));
     }
 
     @ExceptionHandler
     public ResponseEntity<ApiResponse> hub(HubException e) {
+        log.error("[{}] {}", e.getClass().getName() , e.getMessage());
+
         ErrorCode errorCode = e.getErrorCode();
         HttpStatus status = errorCode.getHttpStatus();
 
@@ -34,13 +41,15 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> exception(Exception e){
+        log.error("[{}] {}", e.getClass().getName(), e.getMessage());
+
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
         HttpStatus status = errorCode.getHttpStatus();
 
         return ResponseEntity.status(status).body(new ApiResponse(errorCode.getCode(), errorCode.getMessage()));
     }
 
-    private String extractValidationDetailMessage(MethodArgumentNotValidException e) {
-        return e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+    private ObjectError extractValidationDetailError(MethodArgumentNotValidException e) {
+        return e.getBindingResult().getAllErrors().get(0);
     }
 }

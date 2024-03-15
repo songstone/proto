@@ -14,8 +14,11 @@ import java.util.Date;
 @Component
 public class JwtManager {
 
+    // TODO 주입
     private static final String SECRET_KEY = "HUB_PROTO";
     private static final Long EXP = 3 * (1000L*60*60);
+
+    private static final String AUTH_HEADER = "Authorization";
 
     public String createToken(Long empNo) {
         return Jwts.builder()
@@ -45,7 +48,7 @@ public class JwtManager {
     }
 
     public String extractToken(HttpServletRequest request) {
-        String authToken = request.getHeader("Authorization");
+        String authToken = request.getHeader(AUTH_HEADER);
         if(!StringUtils.hasText(authToken)) return "";
 
         return authToken.replace("Bearer ", "");

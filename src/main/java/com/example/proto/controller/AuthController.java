@@ -6,6 +6,7 @@ import com.example.proto.dto.request.LoginRequest;
 import com.example.proto.dto.TokenDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -15,8 +16,15 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public ApiDataResponse<TokenDto> login(@Valid LoginRequest loginRequest) {
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ApiDataResponse<TokenDto> formLogin(@Valid LoginRequest loginRequest) {
+        TokenDto token = authService.login(loginRequest);
+
+        return new ApiDataResponse<>(token);
+    }
+
+    @PostMapping(value = "/login")
+    public ApiDataResponse<TokenDto> jsonLogin(@RequestBody @Valid LoginRequest loginRequest) {
         TokenDto token = authService.login(loginRequest);
 
         return new ApiDataResponse<>(token);
