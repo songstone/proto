@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
-import java.util.Map;
 
 @Component
 public class JwtManager {
@@ -21,7 +20,7 @@ public class JwtManager {
 
     private static final String AUTH_HEADER = "Authorization";
 
-    public String createToken(Long empNo) {
+    public String createToken(Integer empNo) {
         return Jwts.builder()
             .setSubject(String.valueOf(empNo))
             .setIssuedAt(new Date())

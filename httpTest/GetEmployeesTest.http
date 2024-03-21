@@ -1,2 +1,2 @@
-GET http://localhost:8080/api/employee/
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzEwNDgwNzA2LCJleHAiOjE3MTA0OTE1MDZ9.KlP_T9k59aV3ZAzjo4j_k9eanhHXgC1DxuNxpW4k4dg
+GET http://localhost:8080/api/employee
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDUiLCJpYXQiOjE3MTEwMDY1MDYsImV4cCI6MTcxMTAxNzMwNn0.UGRJrAxt-5cPsVnX53DlqaTalW1EmRK9MJLECQTtGxw

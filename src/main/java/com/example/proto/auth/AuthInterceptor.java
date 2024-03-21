@@ -1,7 +1,7 @@
 package com.example.proto.auth;
 
-import com.example.proto.domain.Employee;
-import com.example.proto.domain.EmployeeRepository;
+import com.example.proto.domain.organization.employee.Employee;
+import com.example.proto.domain.organization.employee.EmployeeRepository;
 import com.example.proto.exception.HubException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,13 +27,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         validateTokenInfo(token);
 
         Long empNo = Long.parseLong(jwtManager.getSubject(token));
-
-        Employee employee = employeeRepository.findById(empNo).orElseThrow(
-            () -> new HubException(INVALID_TOKEN, "인증정보가 존재하지 않습니다.")
-        );
-        if(!employee.isValid()) {
-            throw new HubException(INVALID_TOKEN, "인증정보가 유효하지 않습니다.");
-        }
+        validateEmployeeInfo(empNo);
 
         request.setAttribute(USER_ID_KEY, empNo);
 
@@ -46,6 +40,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         if (!jwtManager.verifyToken(token)) {
             throw new HubException(INVALID_TOKEN, "유효하지 않은 토큰 입니다.");
+        }
+    }
+
+    private void validateEmployeeInfo(Long empNo) {
+        Employee employee = employeeRepository.findById(empNo).orElseThrow(
+            () -> new HubException(INVALID_TOKEN, "인증정보가 존재하지 않습니다.")
+        );
+        if(!employee.isValid()) {
+            throw new HubException(INVALID_TOKEN, "인증정보가 유효하지 않습니다.");
         }
     }
 }
