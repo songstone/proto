@@ -6,10 +6,14 @@ import com.example.proto.domain.organization.department.Department;
 import com.example.proto.domain.organization.department.EmployeeDepartment;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.proto.constant.YnStatus.N;
+import static com.example.proto.constant.YnStatus.Y;
 
 @Getter
 @Setter
@@ -44,17 +48,17 @@ public class Employee extends BaseEntity {
     @Column(columnDefinition = "INT")
     private YnStatus isWithdraw;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "CHAR(1)")
+    private YnStatus isDeleted;
+
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<EmployeeDepartment> employeeDepartments = new ArrayList<>();
 
     @OneToMany(mappedBy = "leader", fetch = FetchType.LAZY)
     private List<Department> manageDepartments = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "CHAR(1)")
-    private YnStatus isDeleted;
-
     public boolean isValid() {
-        return YnStatus.N == this.isDeleted;
+        return N == this.isDeleted;
     }
 }

@@ -22,4 +22,12 @@ public class EmployeeDepartment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dept_no")
     private Department department;
+
+    public Integer getEmployeeIdx() {
+        return employee.getIdx();
+    }
+
+    public Integer getDepartmentIdx() {
+        return department.getIdx();
+    }
 }

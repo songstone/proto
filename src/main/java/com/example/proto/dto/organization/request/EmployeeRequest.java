@@ -1,11 +1,7 @@
 package com.example.proto.dto.organization.request;
 
-import com.example.proto.domain.organization.employee.Employee;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import org.springframework.data.domain.Pageable;
 
 public class EmployeeRequest {
     public record Token (
@@ -18,9 +14,8 @@ public class EmployeeRequest {
     ) {
     }
 
-    public record list (
-        Integer dn,
-        Pageable pageable
+    public record List (
+
     ) {
     }
 }

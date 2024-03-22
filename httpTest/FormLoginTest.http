@@ -1,5 +1,5 @@
 POST http://localhost:8080/api/auth/token
 Content-Type: application/x-www-form-urlencoded
 
-email = test2@naver.com &
-password = 5678
+email = ssh@hubdnc.com &
+password = 1234

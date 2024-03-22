@@ -35,6 +35,7 @@ public record EmployeeListDto(
     public static class DepartmentDto {
         private Integer no;
         private String name;
+        private Integer leaderNo;
         private Integer parentNo;
         private String parentName;
 
@@ -43,9 +44,13 @@ public record EmployeeListDto(
             Integer parentNo = (parentDepartment != null) ? parentDepartment.getIdx() : null;
             String parentName = (parentDepartment != null) ? parentDepartment.getName() : null;
 
+            Employee leader = department.getLeader();
+            Integer leaderNo = leader != null ? leader.getIdx() : null;
+
             return new DepartmentDto(
                 department.getIdx(),
                 department.getName(),
+                leaderNo,
                 parentNo,
                 parentName
             );

@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepartment, Long> {
+public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepartment, Integer> {
 
-    @Query("SELECT ed FROM EmployeeDepartment ed JOIN FETCH ed.department d JOIN FETCH ed.employee e")
+    @Query("SELECT ed FROM EmployeeDepartment ed " +
+                "JOIN FETCH ed.department d " +
+                "JOIN FETCH ed.employee e " +
+                "JOIN FETCH d.leader l")
     List<EmployeeDepartment> findFetchAllByEmployeeIn(List<Employee> employees);
 }

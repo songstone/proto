@@ -5,19 +5,21 @@ import com.example.proto.domain.organization.BaseEntity;
 import com.example.proto.domain.organization.employee.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.DynamicInsert;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.proto.constant.YnStatus.N;
+
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 @Entity
 @Table(name = "department")
 public class Department extends BaseEntity {
@@ -46,7 +48,7 @@ public class Department extends BaseEntity {
     private YnStatus isDeleted;
 
     public boolean isValid() {
-        return YnStatus.N == this.isDeleted;
+        return N == this.isDeleted;
     }
 
     public void designateLeader(Employee employee) {
@@ -55,6 +57,7 @@ public class Department extends BaseEntity {
     }
 
     public void registerParent(Department department) {
+        if(department == null) return;
         this.parentDepartment = department;
         department.childDepartments.add(this);
     }

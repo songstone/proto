@@ -19,16 +19,17 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final JwtManager jwtManager;
     private final EmployeeRepository employeeRepository;
 
-    private static final String USER_ID_KEY = "empNo";
+    public static final String USER_ID_KEY = "empNo";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = jwtManager.extractToken(request);
         validateTokenInfo(token);
 
-        Long empNo = Long.parseLong(jwtManager.getSubject(token));
+        Integer empNo = Integer.parseInt(jwtManager.getSubject(token));
         validateEmployeeInfo(empNo);
 
+        // TODO 유저 IDX 저장 방식 조정 필요
         request.setAttribute(USER_ID_KEY, empNo);
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
@@ -43,7 +44,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
     }
 
-    private void validateEmployeeInfo(Long empNo) {
+    private void validateEmployeeInfo(Integer empNo) {
         Employee employee = employeeRepository.findById(empNo).orElseThrow(
             () -> new HubException(INVALID_TOKEN, "인증정보가 존재하지 않습니다.")
         );
