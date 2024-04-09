@@ -1,23 +1,20 @@
 package com.example.proto.domain.organization.department;
 
-import com.example.proto.constant.YnStatus;
+import com.example.proto.constant.NyStatus;
 import com.example.proto.domain.organization.BaseEntity;
 import com.example.proto.domain.organization.employee.Employee;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.proto.constant.YnStatus.N;
+import static com.example.proto.constant.NyStatus.Y;
 
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
 @Entity
@@ -45,10 +42,14 @@ public class Department extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "CHAR(1)")
-    private YnStatus isDeleted;
+    private NyStatus isDeleted;
 
-    public boolean isValid() {
-        return N == this.isDeleted;
+    public boolean isInvalid() {
+        return isDeleted();
+    }
+
+    public boolean isDeleted() {
+        return Y == this.isDeleted;
     }
 
     public void designateLeader(Employee employee) {
@@ -57,7 +58,6 @@ public class Department extends BaseEntity {
     }
 
     public void registerParent(Department department) {
-        if(department == null) return;
         this.parentDepartment = department;
         department.childDepartments.add(this);
     }

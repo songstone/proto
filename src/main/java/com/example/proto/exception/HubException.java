@@ -9,7 +9,7 @@ public class HubException extends RuntimeException {
     private final ErrorCode errorCode;
 
     public HubException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
+        super(errorCode.name());
         this.errorCode = errorCode;
     }
 

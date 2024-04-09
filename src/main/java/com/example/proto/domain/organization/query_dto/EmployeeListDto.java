@@ -2,28 +2,35 @@ package com.example.proto.domain.organization.query_dto;
 
 import com.example.proto.domain.organization.department.Department;
 import com.example.proto.domain.organization.employee.Employee;
+import com.example.proto.domain.organization.position.Position;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Optional;
 
 public record EmployeeListDto(
     Integer no,
     Integer isActive,
     String empName,
-    Integer rankNo,
-    Integer positionNo,
+    String rankName,
+    String positionName,
     String email,
     String phone,
     List<DepartmentDto> deptList
 ) {
     public static EmployeeListDto of(Employee employee, List<Department> departments) {
+        Optional<String> rankNameOptional = Optional.ofNullable(employee.getRank())
+            .map(Position::getName);
+        Optional<String> positionNameOptional = Optional.ofNullable(employee.getPosition())
+            .map(Position::getName);
+
         return new EmployeeListDto(
             employee.getIdx(),
             employee.getIsActive().ordinal(),
             employee.getName(),
-            employee.getRankNo(),
-            employee.getPositionNo(),
+            rankNameOptional.orElse("미정"),
+            positionNameOptional.orElse("미정"),
             employee.getEmail(),
             employee.getPhone(),
             departments.stream().map(DepartmentDto::of).toList()

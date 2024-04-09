@@ -1,7 +1,10 @@
 package com.example.proto.dto.organization.request;
 
+import com.example.proto.constant.NyStatus;
+import com.example.proto.domain.organization.position.Position;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 
 public class EmployeeRequest {
     public record Token (
@@ -15,7 +18,11 @@ public class EmployeeRequest {
     }
 
     public record List (
+        Integer rankNo,
+        String keyword,
 
+        @Range(min = 0, max = 1, message = "활성화여부 검색값이 올바르지 않습니다.")
+        Integer isActive
     ) {
     }
 }

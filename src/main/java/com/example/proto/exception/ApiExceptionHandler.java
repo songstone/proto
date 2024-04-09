@@ -10,6 +10,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static com.example.proto.constant.ErrorCode.BAD_REQUEST;
+import static com.example.proto.constant.ErrorCode.INTERNAL_SERVER_ERROR;
+
 @Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -21,10 +24,11 @@ public class ApiExceptionHandler {
 
         log.error("[{}] {}", detailError.getObjectName(), detailMessage);
 
-        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
-        HttpStatus status = errorCode.getHttpStatus();
+        ErrorCode errorCode = BAD_REQUEST;
 
-        return ResponseEntity.status(status).body(new ApiResponse(errorCode.getCode(), detailMessage));
+        return ResponseEntity
+            .status(errorCode.getHttpStatus())
+            .body(new ApiResponse(errorCode.getCode(), detailMessage));
     }
 
     @ExceptionHandler
@@ -32,19 +36,21 @@ public class ApiExceptionHandler {
         log.error("[{}] {}", e.getClass().getName() , e.getMessage());
 
         ErrorCode errorCode = e.getErrorCode();
-        HttpStatus status = errorCode.getHttpStatus();
 
-        return ResponseEntity.status(status).body(new ApiResponse(errorCode.getCode(), e.getMessage()));
+        return ResponseEntity
+            .status(errorCode.getHttpStatus())
+            .body(new ApiResponse(errorCode.getCode(), e.getMessage()));
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> exception(Exception e){
+    public ResponseEntity<ApiResponse> exception(Exception e){
         log.error("[{}] {}", e.getClass().getName(), e.getMessage());
 
-        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        HttpStatus status = errorCode.getHttpStatus();
+        ErrorCode errorCode = INTERNAL_SERVER_ERROR;
 
-        return ResponseEntity.status(status).body(new ApiResponse(errorCode.getCode(), errorCode.getMessage()));
+        return ResponseEntity
+            .status(errorCode.getHttpStatus())
+            .body(new ApiResponse(errorCode.getCode(), errorCode.name()));
     }
 
     private ObjectError extractValidationDetailError(MethodArgumentNotValidException e) {

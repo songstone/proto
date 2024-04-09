@@ -1,6 +1,8 @@
 package com.example.proto.config;
 
-import com.example.proto.auth.AuthInterceptor;
+import com.example.proto.config.component.AuthInterceptor;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +18,16 @@ import java.util.Optional;
 public class JpaConfig {
 
     @Bean
-    public AuditorAware<Integer> auditorProvider(HttpServletRequest request) {
+    public JPAQueryFactory queryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
+    }
+
+    @Bean
+    public AuditorAware<Integer> auditorProvider(HttpServletRequest request, AuthInterceptor interceptor) {
         return () -> {
             // TODO 유저 IDX 저장/추출 방식 조정 필요
-            Object userIdxObj = request.getAttribute(AuthInterceptor.USER_ID_KEY);
+            Object userIdxObj = interceptor.getUserIdInfo(request);
+
             if (userIdxObj != null) {
                 try {
                     Integer userIdx = Integer.valueOf(String.valueOf(userIdxObj));
